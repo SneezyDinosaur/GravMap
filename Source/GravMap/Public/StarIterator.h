@@ -3,42 +3,24 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Tasks/GameplayTask_SpawnActor.h"
-#include "Math/UnrealMathUtility.h"
-#include "Engine/World.h"
+#include "GameFramework/Actor.h"
 #include "StarIterator.generated.h"
 
-
-
-
-/**
- * 
- */
 UCLASS()
-class GRAVMAP_API UStarIterator : public UGameplayTask_SpawnActor
+class GRAVMAP_API AStarIterator : public AActor
 {
 	GENERATED_BODY()
-
-public:
+	
+public:	
+	// Sets default values for this actor's properties
+	AStarIterator();
 
 protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
-	//Function to handle parsing CSV file
-	void ReadStarDataFromFile();
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 
-	//returns a double that is a conversion from HMS Right ascension to radians
-	double EquitorialToCartesian(int hours, int minutes, double seconds);
-
-	//Variable to which simulation will be scaled, used in compbination with Star struct distanceFromSol && mass
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Unknown, meta = (AllowPrivateAccess = true))
-	float scaleFactor;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Unknown, meta = (AllowPrivateAccess = true))
-	class AActor* Star;
-
-
-
-
-private:
-	
 };
