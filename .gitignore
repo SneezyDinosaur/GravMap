@@ -19,9 +19,8 @@
 !/Content/**/*.uasset
 !/Content/**/*.umap
 
-# Allow any files from /RawContent dir.
-# Any file in /RawContent dir will be managed by git lfs.
-!/RawContent/**/*
+# File types to not be ignored
+!*.csv
 
 # OS/platform generated files.
 
