@@ -16,11 +16,11 @@ public:
 	// Sets default values for this actor's properties
 	AStar();
 
-	void SetStarPosition(FVector position, float mass, FString designation);
+	void SetStarPosition(FVector position);
 
-	void WriteStarInfo(FString designation, float hourRightAscension, float minuteRightAscension, float secondRightAscension, float degreeDeclination, float minuteDeclination, float secondsDeclination, float distance, float starMass);
+	void WriteStarInfo(FName designation, FVector rightAscension, FVector declination, float distance, float starMass);
 
-	FVector UpdateCartesianPosition(float hourRightAscension, float minuteRightAscension, float secondRightAscension, float degreeDeclination, float minuteDeclination, float secondsDeclination, float distance);
+	void UpdateCartesianPosition(FVector rightAscension, FVector declination, float distance);
 
 
 protected:
@@ -37,33 +37,30 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/**Name of the star using FName  */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
-	FString StarName;
+	FName StarName;
+
+	/** Star Location Right Ascension where Hours(X), Minutes(Y), Seconds(Z)*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
+	FVector RightAscension;
+
+	/** Star Location Declination- where Degrees(X), Minutes(Y), Seconds(Z)*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
+	FVector Declination;
+
+	/** Star Mass in Solar Masses*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
+	float Mass;
+
+	/*Star Distance from Sol, in Lightyears*/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
+	float DistFromSol;
+
+	/*Scale factor to determine scaled down distance, mass, etc. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
+	float ScaleFactor; // It may not be a bad idea to use a long or long long since the scale from lightyears to 1 meter is gonna be wack as fuck
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
-	float Hra;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
-	float Mra;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
-	float Sra;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
-	float Ddec;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
-	float Mdec;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
-	float Sdec;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
-	float mass;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
-	float distFromSol;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Star Information")
-	float scaleFactor;
+	FVector cartesianPosition;
 };

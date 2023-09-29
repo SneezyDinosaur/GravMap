@@ -16,6 +16,8 @@ void AStar::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UpdateCartesianPosition(RightAscension, Declination, DistFromSol);
+
 	
 }
 
@@ -26,34 +28,37 @@ void AStar::Tick(float DeltaTime)
 
 }
 
-void AStar::SetStarPosition(FVector position, float starMass, FString designation)
+void AStar::SetStarPosition(FVector position)
 {
-	
+	K2_TeleportTo(position, FRotator::ZeroRotator);
 
 }
 
-void AStar::WriteStarInfo(FString designation, float hourRightAscension, float minuteRightAscension, float secondRightAscension, float degreeDeclination, float minuteDeclination, float secondsDeclination, float distance, float starMass)
+void AStar::WriteStarInfo(FName designation, FVector rightAscension, FVector declination, float distance, float starMass)
 {
 	StarName = designation;
-	Hra = hourRightAscension;
-	Mra = minuteRightAscension;
-	Sra = secondRightAscension;
-	Ddec = degreeDeclination;
-	Mdec = minuteDeclination;
-	Sdec = secondsDeclination;
-
+	RightAscension = rightAscension;
+	Declination = declination;
+	DistFromSol = distance;
+	Mass = starMass;
 }
 
 
-FVector AStar::UpdateCartesianPosition(float hourRightAscension, float minuteRightAscension, float secondRightAscension, float degreeDeclination, float minuteDeclination, float secondsDeclination, float distance)
+void AStar::UpdateCartesianPosition(FVector rightAscension, FVector declination, float distance)
 {
+	float rightAscensionRadians = RightAscensiontoRadians((float)rightAscension.X, (float)rightAscension.Y, (float)rightAscension.Z);
 
+	float declinationRadians = DegreesMinSectoRadians((float)declination.X, (float)declination.Y, (float)declination.Z);
 
+	cartesianPosition.X = distance * FMath::Sin(rightAscensionRadians) * FMath::Cos(declinationRadians);
+	cartesianPosition.Y = distance * FMath::Sin(rightAscensionRadians) * FMath::Sin(declinationRadians);
+	cartesianPosition.Z = distance * FMath::Cos(rightAscensionRadians);
 
+	SetStarPosition(cartesianPosition);	
 }
 
 
-float AStar::RightAscensiontoRadians(float hour, float minute, float seconds)
+float AStar::RightAscensiontoRadians(float hour, float minute, float seconds) //These functions don't use FVectors to make them a bit easier to read.
 {
 	//1 hour = 15 degrees
 	float stor = hour * 15;
@@ -68,7 +73,7 @@ float AStar::RightAscensiontoRadians(float hour, float minute, float seconds)
 	return stor;
 }
 
-float AStar::DegreesMinSectoRadians(float degrees, float minute, float seconds)
+float AStar::DegreesMinSectoRadians(float degrees, float minute, float seconds) //These functions don't use FVectors to make them a bit easier to read.
 {
 	//Convert float degrees into radians, hold ongoing calculation in stor
 	float stor = FMath::DegreesToRadians(degrees);

@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Star.h"
+#include "Misc/Paths.h"
+#include "Engine/World.h"
 #include "StarIterator.generated.h"
 
 UCLASS()
@@ -19,8 +22,15 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void LoadCSV();
+
+	TArray <AStar> localCluster;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Stars, meta = (AllowPrivateAccess = true))
+	class AStar* StarBlueprint;
 
 };
